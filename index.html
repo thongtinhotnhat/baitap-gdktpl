@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ôn tập – Hiến pháp CHXHCN Việt Nam</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --card: #fffdf8;
+    --navy: #1a2744;
+    --gold: #c8942a;
+    --gold-light: #f0d89a;
+    --green: #2d6a4f;
+    --green-bg: #d8f3dc;
+    --red: #8b2020;
+    --red-bg: #ffe5e5;
+    --muted: #6b7280;
+    --border: #ddd3be;
+    --shadow: 0 2px 12px rgba(26,39,68,.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    color: #fff;
+    padding: 28px 24px 22px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,.25);
+  }
+  header h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: .01em;
+    line-height: 1.3;
+  }
+  header .subtitle {
+    font-size: .85rem;
+    color: var(--gold-light);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+  .header-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 180px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(255,255,255,.2);
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    font-family: inherit;
+    font-size: .9rem;
+    outline: none;
+    transition: border .2s;
+  }
+  .search-box::placeholder { color: rgba(255,255,255,.5); }
+  .search-box:focus { border-color: var(--gold); }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .85rem;
+    font-weight: 600;
+    transition: all .2s;
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: #fff;
+  }
+  .btn-gold:hover { background: #a8771e; }
+  .btn-outline {
+    background: transparent;
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,.35);
+  }
+  .btn-outline:hover { background: rgba(255,255,255,.12); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex;
+    gap: 20px;
+    padding: 12px 24px;
+    background: var(--gold);
+    color: #fff;
+    font-size: .82rem;
+    font-weight: 600;
+    flex-wrap: wrap;
+  }
+  .stat { display: flex; align-items: center; gap: 5px; }
+
+  /* ── FILTER TABS ── */
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    padding: 14px 24px;
+    overflow-x: auto;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    color: var(--navy);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all .2s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--navy);
+    color: #fff;
+    border-color: var(--navy);
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 14px;
+  }
+  .section-label h2 {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    color: var(--gold);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: box-shadow .2s;
+  }
+  .q-card:hover { box-shadow: 0 4px 20px rgba(26,39,68,.13); }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 18px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .q-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--navy);
+    color: #fff;
+    font-size: .78rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .q-text {
+    flex: 1;
+    font-size: .95rem;
+    line-height: 1.55;
+    font-weight: 400;
+    color: var(--navy);
+  }
+  .q-toggle {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .75rem;
+    color: var(--muted);
+    transition: all .2s;
+    margin-top: 2px;
+  }
+  .q-card.open .q-toggle {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: #fff;
+    transform: rotate(180deg);
+  }
+
+  /* ── ANSWERS ── */
+  .q-body {
+    display: none;
+    padding: 0 18px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .q-card.open .q-body { display: block; }
+
+  .options {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 13px;
+    border-radius: 8px;
+    font-size: .9rem;
+    line-height: 1.45;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    transition: all .15s;
+  }
+  .option.correct {
+    background: var(--green-bg);
+    border-color: #52b788;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .option-key {
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: .85rem;
+    min-width: 18px;
+  }
+  .correct-badge {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: .75rem;
+    background: var(--green);
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 10px;
+    align-self: center;
+  }
+
+  /* ── TRUE/FALSE ── */
+  .tf-item {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+  }
+  .tf-stmt {
+    font-size: .9rem;
+    line-height: 1.5;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .tf-answer {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  .tf-answer.dung {
+    background: var(--green-bg);
+    color: var(--green);
+    border: 1.5px solid #52b788;
+  }
+  .tf-answer.sai {
+    background: var(--red-bg);
+    color: var(--red);
+    border: 1.5px solid #f4a2a2;
+  }
+  .tf-label {
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  /* ── HIGHLIGHT (search) ── */
+  mark {
+    background: var(--gold-light);
+    color: var(--navy);
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: .95rem;
+  }
+  .empty .icon { font-size: 2.5rem; margin-bottom: 10px; }
+
+  /* ── BACK TO TOP ── */
+  #btt {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 14px rgba(0,0,0,.25);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    transition: background .2s;
+  }
+  #btt:hover { background: var(--gold); }
+  #btt.visible { display: flex; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 520px) {
+    .q-header { padding: 13px 14px 12px; }
+    .q-body { padding: 0 14px 14px; }
+    .q-text { font-size: .88rem; }
+    main { padding: 14px 10px 50px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📜 Ôn tập – Hiến pháp CHXHCN Việt Nam</h1>
+  <p class="subtitle">Trắc nghiệm + Đúng / Sai • Bấm câu hỏi để xem đáp án</p>
+  <div class="header-controls">
+    <input class="search-box" id="searchInput" type="search" placeholder="🔍  Tìm kiếm câu hỏi...">
+    <button class="btn btn-gold" onclick="expandAll()">Mở tất cả</button>
+    <button class="btn btn-outline" onclick="collapseAll()">Đóng tất cả</button>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <span class="stat">📝 <span id="totalCount">0</span> câu hỏi</span>
+  <span class="stat">✅ <span id="mcCount">0</span> trắc nghiệm</span>
+  <span class="stat">⚖️ <span id="tfCount">0</span> đúng / sai</span>
+</div>
+
+<div class="filter-row">
+  <button class="filter-btn active" onclick="setFilter('all', this)">Tất cả</button>
+  <button class="filter-btn" onclick="setFilter('mc', this)">Trắc nghiệm</button>
+  <button class="filter-btn" onclick="setFilter('tf', this)">Đúng / Sai</button>
+</div>
+
+<main id="main"></main>
+
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+const mc = [
+  {n:1, q:"Hệ thống các quy phạm pháp luật có hiệu lực pháp lý cao nhất quy định những vấn đề cơ bản nhất về chủ quyền quốc gia, chế độ chính trị, chính sách kinh tế, văn hoá, xã hội, tổ chức quyền lực nhà nước, địa vị pháp lý của con người và công dân là nội dung của khái niệm nào dưới đây?", opts:["Luật hành chính","Luật lao động","Luật hình sự","Hiến pháp"], ans:3},
+  {n:2, q:"Văn bản pháp luật nào được coi là Luật cơ bản của nhà nước?", opts:["Luật nhà nước","Luật tổ chức Quốc hội","Luật tổ chức Hội đồng nhân dân","Hiến pháp"], ans:3},
+  {n:3, q:"Trong hệ thống pháp luật nước Cộng hòa xã hội chủ nghĩa Việt Nam, văn bản pháp luật nào có giá trị pháp lý cao nhất?", opts:["Luật nhà nước","Luật tổ chức Quốc hội","Luật tổ chức Hội đồng nhân dân","Hiến pháp"], ans:3},
+  {n:4, q:"Trong hệ thống pháp luật nước Cộng hòa xã hội chủ nghĩa Việt Nam, Hiến pháp là văn bản pháp luật có giá trị pháp lý", opts:["thấp nhất","vĩnh cửu","vĩnh viễn","cao nhất"], ans:3},
+  {n:5, q:"Hiến pháp đầu tiên của nước ta được ban hành vào năm nào?", opts:["1945","1947","1950","1946"], ans:3},
+  {n:6, q:"Bản Hiến pháp hiện hành của nước ta là năm nào?", opts:["1980","1992","2001","2013"], ans:3},
+  {n:7, q:"Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam là văn bản quy phạm pháp luật do", opts:["Quốc hội ban hành","Chủ tịch nước ban hành","Thủ tướng chính phủ giới thiệu","Mặt trận tổ quốc ban hành"], ans:0},
+  {n:8, q:"Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam quy định những vấn đề", opts:["cơ bản và quan trọng nhất","cơ bản và cụ thể hóa mọi vấn đề","quan trọng nhất đối với ngân sách","quan trọng nhất đối với Đảng"], ans:0},
+  {n:9, q:"Trong hệ thống các văn bản pháp luật Việt Nam, Hiến pháp được coi là", opts:["đạo luật cơ bản nhất","luật cụ thể nhất","luật dễ thay đổi nhất","luật thiếu tính ổn định"], ans:0},
+  {n:10, q:"Hiến pháp là đạo luật cơ bản của Nhà nước, các quy định trong Hiến pháp mang tính", opts:["tuyên ngôn","bất biến","kinh tế","kinh doanh"], ans:0},
+  {n:11, q:"Hiến pháp là đạo luật cơ bản của Nhà nước, các quy định trong Hiến pháp mang tính", opts:["cương lĩnh","cương quyết","thương mại","vĩnh cửu"], ans:0},
+  {n:12, q:"Hiến pháp là đạo luật cơ bản của Nhà nước, các quy định trong Hiến pháp mang tính tuyên ngôn, góp phần", opts:["tăng thu ngân sách","tăng tính quyền lực","điều chỉnh chung","điều chỉnh cụ thể"], ans:2},
+  {n:13, q:"Hiến pháp là đạo luật cơ bản của Nhà nước, vì dựa vào các quy định trong Hiến pháp các luật, pháp lệnh, nghị định và các văn bản dưới luật khác sẽ", opts:["cụ thể hóa Hiến pháp","chỉnh sửa lại Hiến pháp","độc lập với Hiến pháp","xa rời nội dung Hiến pháp"], ans:0},
+  {n:14, q:"Việc Quốc hội ban hành Luật giáo dục năm 2019 để cụ thể hóa một số nội dung cơ bản của Hiến pháp năm 2013 là thể hiện đặc điểm nào dưới đây của Hiến pháp?", opts:["Hiến pháp là đạo luật cơ bản của nhà nước","Hiến pháp có hiệu lực pháp lý lâu dài","Hiến pháp có hiệu lực pháp lý tương đối ổn định","Hiến pháp có quy trình sửa đổi đặc biệt"], ans:0},
+  {n:15, q:"Việc Quốc hội ban hành Luật bảo vệ môi trường để cụ thể hóa một số nội dung cơ bản của Hiến pháp năm 2013 là thể hiện đặc điểm nào dưới đây của Hiến pháp?", opts:["Hiến pháp là đạo luật cơ bản của nhà nước","Hiến pháp có hiệu lực pháp lý lâu dài","Hiến pháp có hiệu lực pháp lý tương đối ổn định","Hiến pháp có quy trình sửa đổi đặc biệt"], ans:0},
+  {n:16, q:"Căn cứ vào Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam, Quốc hội ban hành Bộ luật Lao động năm 2019 là thể hiện đặc điểm nào dưới đây của Hiến pháp?", opts:["Hiến pháp là đạo luật cơ bản của nhà nước","Hiến pháp có hiệu lực pháp lý lâu dài","Hiến pháp có hiệu lực pháp lý tương đối ổn định","Hiến pháp có quy trình sửa đổi đặc biệt"], ans:0},
+  {n:17, q:"Nội dung của Hiến pháp quy định về những nội dung cơ bản, quan trọng của đất nước vì vậy hiến pháp có hiệu lực pháp lý", opts:["cụ thể","lâu dài","vĩnh viễn","vĩnh cửu"], ans:1},
+  {n:18, q:"Nội dung của Hiến pháp quy định về những nội dung cơ bản, quan trọng của đất nước vì vậy nội dung của hiến pháp mang tính", opts:["tương đối ổn định","tượng trưng lâu dài","cố định và ổn định","ổn định và bất biến"], ans:0},
+  {n:19, q:"Trong lịch sử lập hiến, nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam đã ban hành các bản Hiến pháp nào dưới đây?", opts:["Hiến pháp 1946, 1959, 1980, 1992, 2013","Hiến pháp 1946, 1960, 1980, 1992, 2013","Hiến pháp 1946, 1959, 1981, 1992, 2013","Hiến pháp 1946, 1959, 1980, 1993, 2013"], ans:0},
+  {n:20, q:"Quy trình làm, sửa đổi Hiến pháp Việt Nam bao gồm mấy bước được quy định trong Hiến pháp?", opts:["8 bước","7 bước","6 bước","5 bước"], ans:0},
+  {n:21, q:"Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam năm 2013 có bao nhiêu chương và bao nhiêu điều?", opts:["11 chương, 120 điều","12 chương, 121 điều","13 chương, 122 điều","14 chương, 123 điều"], ans:0},
+  {n:22, q:"Hiến pháp được thông qua khi có bao nhiêu tổng số đại biểu Quốc hội biểu quyết tán thành?", opts:["Ít nhất hai phần ba","Một phần ba","Hai phần ba","Ít nhất một phần ba"], ans:0},
+  {n:23, q:"Yêu cầu làm, sửa đổi Hiến pháp là bước mấy của quy trình làm và sửa đổi Hiến pháp?", opts:["Bước 1","Bước 2","Bước 3","Bước 4"], ans:0},
+  {n:24, q:"Quốc hội quyết định làm, sửa đổi Hiến pháp là bước mấy của quy trình làm và sửa đổi Hiến pháp?", opts:["Bước 2","Bước 1","Bước 3","Bước 4"], ans:0},
+  {n:25, q:"Quốc hội thành lập Ban dự thảo Hiến pháp là bước mấy của quy trình làm và sửa đổi Hiến pháp?", opts:["Bước 3","Bước 4","Bước 1","Bước 2"], ans:0},
+  {n:26, q:"Soạn thảo dự thảo Hiến pháp là bước mấy của quy trình làm và sửa đổi Hiến pháp?", opts:["Bước 4","Bước 3","Bước 2","Bước 1"], ans:0},
+  {n:27, q:"Lấy ý kiến nhân dân về dự thảo Hiến pháp là bước mấy của quy trình làm và sửa đổi Hiến pháp?", opts:["Bước 5","Bước 4","Bước 3","Bước 2"], ans:0},
+  {n:28, q:"Trình Quốc hội thảo luận Dự thảo Hiến pháp là bước mấy của quy trình làm và sửa đổi Hiến pháp?", opts:["Bước 6","Bước 5","Bước 4","Bước 3"], ans:0},
+  {n:29, q:"Quốc hội thông qua Hiến pháp là bước mấy của quy trình làm và sửa đổi Hiến pháp?", opts:["Bước 7","Bước 6","Bước 5","Bước 4"], ans:0},
+  {n:30, q:"Chủ tịch nước công bố Hiến pháp là bước mấy của quy trình làm và sửa đổi Hiến pháp?", opts:["Bước 8","Bước 7","Bước 6","Bước 5"], ans:0},
+  {n:31, q:"Chủ thể nào dưới đây không có thẩm quyền đề nghị làm hoặc sửa đổi Hiến pháp?", opts:["Chủ tịch nước","Ủy ban thường vụ Quốc hội","Chính phủ","Tòa án nhân dân tối cao"], ans:3},
+  {n:32, q:"Chủ thể nào dưới đây không có thẩm quyền đề nghị làm hoặc sửa đổi Hiến pháp?", opts:["Chủ tịch nước","Ủy ban thường vụ Quốc hội","Chính phủ","Viện kiểm sát nhân dân tối cao"], ans:3},
+  {n:33, q:"Chủ thể nào dưới đây có thẩm quyền đề nghị làm hoặc sửa đổi Hiến pháp?", opts:["Chủ tịch nước","Tòa án nhân dân tối cao","Viện kiểm sát nhân dân tối cao","Một phần tư tổng số đại biểu Quốc hội"], ans:0},
+  {n:34, q:"Chủ thể nào dưới đây không có thẩm quyền đề nghị làm hoặc sửa đổi Hiến pháp?", opts:["Thủ tướng chính phủ","Ủy ban thường vụ Quốc hội","Chính phủ","Một phần ba tổng số đại biểu Quốc hội"], ans:0},
+  {n:35, q:"Chủ thể nào dưới đây có thẩm quyền đề nghị làm hoặc sửa đổi Hiến pháp?", opts:["Thủ tướng chính phủ","Chủ tịch nước","Chủ tịch Quốc hội","Tổng bí thư"], ans:1},
+  {n:36, q:"Chủ thể nào dưới đây có thẩm quyền đề nghị làm hoặc sửa đổi Hiến pháp?", opts:["Thủ tướng chính phủ","Ủy ban thường vụ Quốc hội","Chủ tịch Quốc hội","Tổng bí thư"], ans:1},
+  {n:37, q:"Chủ thể nào dưới đây có thẩm quyền đề nghị làm hoặc sửa đổi Hiến pháp?", opts:["Thủ tướng chính phủ","Chính phủ","Tổng bí thư","Viện kiểm sát nhân dân tối cao"], ans:1},
+  {n:38, q:"Chủ thể nào dưới đây có thẩm quyền đề nghị làm hoặc sửa đổi Hiến pháp?", opts:["Thủ tướng chính phủ","Một phần ba tổng số đại biểu Quốc hội","Chủ tịch Quốc hội","Tổng bí thư"], ans:1},
+  {n:39, q:"Quốc hội quyết định việc làm Hiến pháp, sửa đổi Hiến pháp khi có bao nhiêu tổng số đại biểu Quốc hội biểu quyết tán thành?", opts:["Ít nhất hai phần ba","Một phần ba","Hai phần ba","Ít nhất một phần ba"], ans:0},
+  {n:40, q:"Cơ quan nào có thẩm quyền thành lập Ủy ban dự thảo Hiến pháp?", opts:["Chính phủ","Quốc hội","Tòa án","Viện kiểm sát"], ans:1},
+  {n:41, q:"Hiến pháp được thông qua khi có bao nhiêu số đại biểu Quốc hội biểu quyết tán thành?", opts:["Ít nhất hai phần ba","Một phần ba","Hai phần ba","Ít nhất một phần ba"], ans:0},
+  {n:42, q:"Việc trưng cầu ý dân về Hiến pháp do cơ quan nào quyết định?", opts:["Chính phủ","Chủ tịch nước","Quốc hội","Ủy ban thường vụ Quốc hội"], ans:2},
+  {n:43, q:"Thời hạn công bố, thời điểm có hiệu lực của Hiến pháp do cơ quan nào quyết định?", opts:["Quốc hội","Chủ tịch nước","Tổng Bí thư","Thủ tướng chính phủ"], ans:0},
+  {n:44, q:"Mọi văn bản quy phạm pháp luật khi ban hành không phù hợp với Hiến pháp sẽ", opts:["hủy bỏ","tiếp tục","giữ nguyên","thực hiện"], ans:0},
+  {n:45, q:"Khoản 1 Điều 20 Hiến pháp năm 2013 quy định: \"Mọi người có quyền bất khả xâm phạm về thân thể, được pháp luật bảo hộ về sức khoẻ, danh dự và nhân phẩm...\". Nội dung trên thể hiện đặc điểm nào của Hiến pháp Việt Nam năm 2013?", opts:["Hiến pháp có tính ổn định lâu dài","Hiến pháp là đạo luật cơ bản của Nhà nước","Hiến pháp có hiệu lực pháp lý lâu dài","Hiến pháp có quy trình sửa đổi đặc biệt"], ans:1},
+  {n:46, q:"Khoản 1 Điều 8 Hiến pháp năm 2013 quy định: \"Nhà nước được tổ chức và hoạt động theo Hiến pháp và pháp luật...\". Nội dung trên thể hiện đặc điểm nào của Hiến pháp Việt Nam năm 2013?", opts:["Hiến pháp có tính ổn định lâu dài","Hiến pháp là đạo luật cơ bản của Nhà nước","Hiến pháp có hiệu lực pháp lý lâu dài","Hiến pháp có quy trình sửa đổi đặc biệt"], ans:1},
+  {n:47, q:"Căn cứ Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam năm 2013, Quốc hội ban hành Bộ luật Lao động năm 2019. Nội dung trên thể hiện Hiến pháp là cơ sở để", opts:["ban hành các văn bản pháp luật khác","cụ thể hóa nội dung của luật khác","xử phạt mọi hành vi vi phạm pháp luật","dung hòa các mối quan hệ trong xã hội"], ans:0},
+  {n:48, q:"Theo quy định của pháp luật, hành vi nào dưới đây không tuân thủ theo Hiến pháp?", opts:["Đi nghĩa vụ quân sự khi đủ tuổi","Đóng thuế đầy đủ","Tham gia bầu cử tại địa phương sinh sống","Tham gia vào các tệ nạn"], ans:3},
+  {n:49, q:"Nội dung nào dưới đây nói về vai trò và vị trí của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam?", opts:["Là đạo luật cơ bản của Nhà nước","Là văn bản pháp luật mang tính biểu tượng","Là công cụ cơ bản để thực hiện hành pháp","Là công cụ cơ bản để thực hiện quyền tư pháp"], ans:0},
+  {n:50, q:"Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam không có đặc điểm nào dưới đây?", opts:["Hiến pháp là luật cơ bản của Nhà nước","Hiến pháp quy định nguyên tắc tổ chức bộ máy nhà nước","Hiến pháp là luật có hiệu lực pháp lý cao nhất","Hiến pháp là luật có vị trí ngang bằng nhau như các luật khác"], ans:3},
+  {n:51, q:"Theo quy định của pháp luật, chủ thể nào dưới đây có trách nhiệm chấp hành và bảo vệ Hiến pháp?", opts:["Cán bộ – công chức","Người từ đủ 18 tuổi trở lên","Mọi công dân","Người từ đủ 15 tuổi trở lên"], ans:2},
+  {n:52, q:"Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam không có đặc điểm nào dưới đây?", opts:["Luật cơ bản của nước ta","Có hiệu lực pháp lý cao nhất","Quy định những vấn đề cơ bản và quan trọng","Quy định chi tiết nội dung của Hợp đồng lao động"], ans:3},
+  {n:53, q:"Theo quy định của pháp luật, nội dung của các văn bản pháp luật khác cần được ban hành như thế nào trong quan hệ với Hiến pháp?", opts:["Chỉ cần phù hợp với tình hình địa phương","Không được trái với quy định của Hiến pháp","Có mối quan hệ độc lập với Hiến pháp","Có thể dự báo cho sự thay đổi của Hiến pháp"], ans:1},
+  {n:54, q:"Theo quy định của pháp luật, nội dung nào dưới đây phản ánh đúng đặc điểm của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam?", opts:["Hiến pháp là văn bản quy phạm pháp luật do Quốc hội ban hành","Hiến pháp là văn bản quy phạm pháp luật do Nhà nước ban hành","Hiến pháp là văn bản luật do Chính phủ thực hiện","Hiến pháp là văn bản luật thể hiện ý chí của giai cấp nông dân"], ans:0},
+  {n:55, q:"Theo quy định của pháp luật, các quy định của Hiến pháp là cơ sở cho việc xây dựng", opts:["các quan hệ xã hội","hệ thống pháp luật","các quan hệ kinh tế","hệ thống kinh tế đối ngoại"], ans:1},
+  {n:56, q:"Hành vi nào dưới đây là không tuân thủ Hiến pháp?", opts:["Ông B là cán bộ nhà nước luôn tạo điều kiện cho các doanh nghiệp phát triển","Anh D chủ động tham gia hoạt động phòng chống tham nhũng","Chị M có hành vi xả rác thải ra môi trường","Bà T tích cực tuyên truyền chính sách của Nhà nước trong khu dân cư"], ans:2},
+  {n:57, q:"Nội dung nào dưới đây không nói về vị trí của Hiến pháp trong hệ thống pháp luật Việt Nam?", opts:["Quy định những vấn đề cơ bản và quan trọng nhất của quốc gia","Có hiệu lực pháp lý cao nhất trong hệ thống pháp luật Việt Nam","Mọi văn bản quy phạm pháp luật khác đều phải phù hợp với Hiến pháp","Các văn bản pháp luật khác có tính độc lập với Hiến pháp"], ans:3},
+  {n:58, q:"Theo quy định của pháp luật, Hiến pháp quy định nội dung nào sau đây?", opts:["Từng vấn đề cụ thể của đất nước","Các vấn đề cấp bách của quốc gia","Những vấn đề cơ bản nhất của quốc gia","Mọi vấn đề cụ thể của đất nước"], ans:2},
+  {n:59, q:"Nước ta ban hành bản Hiến pháp đầu tiên năm nào?", opts:["1945","1946","1947","1948"], ans:1},
+  {n:60, q:"Hành vi nào dưới đây là thực hiện nghĩa vụ tuân thủ Hiến pháp?", opts:["Doanh nghiệp A không thực hiện nghĩa vụ nộp thuế","Bà X tự giác thực hiện các quy định của Hiến pháp","Chị H tham gia các tổ chức chống phá Nhà nước","Công ty Y khai thác tài nguyên khi chưa được cấp phép"], ans:1},
+  {n:61, q:"Khẳng định nào dưới đây là đúng về đặc điểm của Hiến pháp?", opts:["Hiến pháp quy định những vấn đề cơ bản nhất của đất nước","Hiến pháp chỉ áp dụng cho một số chủ thể pháp luật","Hiến pháp là văn bản pháp luật có hiệu lực trong từng hoàn cảnh cụ thể","Hiến pháp được xây dựng theo ý chí của riêng giai cấp cầm quyền"], ans:0},
+  {n:62, q:"Việc làm nào dưới đây thể hiện trách nhiệm của công dân trong việc thực hiện và tuân thủ Hiến pháp?", opts:["Tuyên truyền chống phá nhà nước","Xuyên tạc đường lối chính sách của Đảng","Đấu tranh ngăn chặn các hành vi phản động","Gây rối an ninh trật tự trong khu dân cư"], ans:2},
+  {n:63, q:"Việc làm nào dưới đây không thể hiện trách nhiệm của công dân trong việc thực hiện nghĩa vụ tuân thủ Hiến pháp?", opts:["Tích cực tìm hiểu nội dung các quy định của Hiến pháp","Nghiêm chỉnh, tự giác thực hiện các quy định của Hiến pháp","Tích cực tuyên truyền, đấu tranh chống các hành vi vi phạm Hiến pháp","Tiếp tay, ủng hộ các hoạt động tuyên truyền chống phá Nhà nước"], ans:3},
+  {n:64, q:"Hiến pháp quy định nội dung nào sau đây?", opts:["Từng vấn đề cụ thể của đất nước","Các vấn đề cấp bách của quốc gia","Những vấn đề cơ bản nhất của quốc gia","Mọi vấn đề cụ thể của đất nước"], ans:2},
+  {n:65, q:"Hành vi nào dưới đây là không thể hiện trách nhiệm của công dân trong việc tuân thủ Hiến pháp?", opts:["Ông B là cán bộ nhà nước luôn tạo điều kiện cho các doanh nghiệp phát triển","Anh D chủ động tham gia hoạt động phòng chống tham nhũng","Chị M có hành vi xả rác thải ra môi trường","Bà T tích cực tuyên truyền chính sách của Nhà nước trong khu dân cư"], ans:2},
+  {n:66, q:"Phát biểu nào dưới đây là sai về khái niệm Hiến pháp?", opts:["Hiến pháp là hệ thống các quy phạm pháp luật có giá trị pháp lý cao nhất","Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam là luật cơ bản của nhà nước","Hiến pháp là văn bản quy phạm pháp luật tương đương văn bản pháp luật khác","Hiến pháp quy định những vấn đề cơ bản nhất của một quốc gia, dân tộc"], ans:2},
+  {n:67, q:"Nội dung nào dưới đây không phù hợp với nội dung cơ bản của Hiến pháp 2013?", opts:["Hiến pháp là luật có vị trí ngang bằng nhau như các luật khác","Học sinh cũng phải có trách nhiệm tuân thủ và bảo vệ Hiến pháp","Các văn bản nếu chưa phù hợp với Hiến pháp thì phải điều chỉnh","Hiến pháp là công cụ bảo vệ quyền con người, quyền công dân"], ans:0},
+  {n:68, q:"Khẳng định nào dưới đây là đúng về Hiến pháp?", opts:["Hiến pháp là văn bản quy phạm pháp luật do Quốc hội ban hành","Hiến pháp là văn bản quy phạm pháp luật do Nhà nước ban hành","Hiến pháp là văn bản luật do Chính phủ thực hiện","Hiến pháp là văn bản luật thể hiện ý chí của Nhà nước"], ans:0},
+  {n:69, q:"Phát biểu nào dưới đây là sai về vị trí của Hiến pháp?", opts:["Mọi văn bản quy phạm pháp luật khi xây dựng đều phải căn cứ vào Hiến pháp","Hiến pháp quy định những vấn đề cơ bản và quan trọng nhất của quốc gia","Hiến pháp giữ vai trò là đạo luật cơ bản, đạo luật gốc của Nhà nước","Hiến pháp có tính không ổn định, thường xuyên thay đổi và điều chỉnh hàng năm"], ans:3},
+  {n:70, q:"Phát biểu nào dưới đây là sai về đặc điểm của Hiến pháp?", opts:["Hiến pháp là đạo luật cơ bản trong hệ thống pháp luật Việt Nam","Hiến pháp quy định tất cả mọi vấn đề phổ biến trong xã hội","Hiến pháp có hiệu lực lâu dài và tương đối ổn định","Hiến pháp có quy trình, sửa đổi đặc biệt theo quy định"], ans:1},
+  {n:71, q:"Phát biểu nào dưới đây là sai về đặc điểm của Hiến pháp?", opts:["Hiến pháp thể hiện tập trung nhất ý chí của nhân dân","Hiến pháp bảo vệ lợi ích hợp pháp của nhân dân","Hiến pháp là văn bản dưới luật do Chính phủ ban hành","Hiến pháp là luật cơ bản của Nhà nước"], ans:2},
+  {n:72, q:"Phát biểu nào dưới đây là sai khi nói về trách nhiệm của công dân trong thực hiện nghĩa vụ tuân thủ Hiến pháp?", opts:["Mọi công dân cần tích cực tìm hiểu nội dung của Hiến pháp","Mỗi công dân cần nghiêm chỉnh thực hiện các quy định trong Hiến pháp","Công dân cần ủng hộ các việc làm nhằm xóa bỏ nội dung Hiến pháp","Tuân thủ Hiến pháp là trách nhiệm của mọi công dân"], ans:2},
+  {n:73, q:"Phát biểu nào dưới đây là sai khi nói về trách nhiệm của công dân trong thực hiện nghĩa vụ tuân thủ Hiến pháp?", opts:["Công dân tích cực đấu tranh với các hành vi vi phạm pháp luật","Công dân chỉ thực hiện các nội dung của Hiến pháp liên quan đến bản thân","Công dân tích cực tuyên truyền vận động người thân thực hiện Hiến pháp","Công dân đấu tranh bảo vệ Hiến pháp, bảo vệ quyền và lợi ích hợp pháp của Nhà nước"], ans:1},
+];
+
+const tf = [
+  {n:76, items:[
+    {s:"Việc quy định công dân đủ mười tám tuổi trở lên có quyền bầu cử và đủ hai mươi mốt tuổi trở lên có quyền ứng cử vào Quốc hội, Hội đồng nhân dân là thể hiện tính quyền lực bắt buộc chung của pháp luật.", a:true},
+    {s:"Các quy định của Luật Bầu cử đại biểu Quốc hội và đại biểu Hội đồng nhân dân quy định là căn cứ để xây dựng Điều 27 của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam năm 2013.", a:false},
+    {s:"Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam năm 2013 khác với Luật Bầu cử đại biểu Quốc hội và đại biểu Hội đồng nhân dân ở đối tượng điều chỉnh.", a:true},
+    {s:"Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam năm 2013 quy định cụ thể trình tự, thủ tục cách thức để công dân thực hiện quyền bầu cử, ứng cử của mình.", a:false},
+  ]},
+  {n:78, items:[
+    {s:"Mọi công dân chỉ cần tuân thủ thật đầy đủ Hiến pháp là được mà không cần phải thực hiện các văn bản pháp luật cụ thể.", a:false},
+    {s:"Mọi công dân chấp hành thật tốt các quy định của pháp luật cụ thể, còn Hiến pháp mang tính chung chung thì không cần thực hiện.", a:false},
+    {s:"Nếu văn bản quy phạm pháp luật mang tính lạc hậu hơn so với Hiến pháp thì cần phải sửa đổi văn bản cho phù hợp Hiến pháp.", a:true},
+    {s:"Hiến pháp và các văn bản pháp luật có tính độc lập và không liên hệ, nếu Hiến pháp là chung nhất thì văn bản luật là cụ thể nhất.", a:false},
+  ]},
+  {n:86, items:[
+    {s:"Những nội dung nào không quy định trong Hiến pháp thì nhân dân có quyền vi phạm mà không bị xử lý.", a:false},
+    {s:"Việc tổ chức và hoạt động của Bộ máy phải tuân thủ chặt chẽ các quy định trong Hiến pháp 2013.", a:true},
+    {s:"Mọi công dân có trách nhiệm tuân thủ Hiến pháp chính là góp phần bảo vệ Hiến pháp.", a:true},
+    {s:"Các thế lực thù địch luôn tìm cách phá hoại Hiến pháp nhằm gây mất ổn định xã hội.", a:true},
+  ]},
+  {n:87, items:[
+    {s:"Những nội dung của Hiến pháp 2013 về quyền lao động và việc làm của công dân là cơ sở để ban hành những nội dung cơ bản của pháp luật lao động.", a:true},
+    {s:"Việc nâng độ tuổi về hưu đối với lao động nam và nữ là trái với nội dung cơ bản của Hiến pháp 2013 về vấn đề lao động, việc làm.", a:false},
+    {s:"Vấn đề giải quyết việc làm ở nước ta ngày càng đạt được nhiều thành tựu to lớn là thể hiện giá trị mà Hiến pháp 2013 mang lại.", a:true},
+    {s:"Trải qua 10 năm thực hiện vấn đề lao động và việc làm được quy định trong Hiến pháp 2013 đã lạc hậu cần sửa đổi.", a:false},
+  ]},
+];
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let currentFilter = 'all';
+let searchTerm = '';
+
+// ─────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────
+const keys = ['A','B','C','D'];
+
+function hl(text) {
+  if (!searchTerm) return text;
+  const re = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+
+function buildMC(q) {
+  const optHtml = q.opts.map((o,i) => {
+    const correct = i === q.ans;
+    return `<div class="option${correct?' correct':''}">
+      <span class="option-key">${keys[i]}.</span>
+      <span>${hl(o)}</span>
+      ${correct ? '<span class="correct-badge">✓ Đúng</span>' : ''}
+    </div>`;
+  }).join('');
+  return `<div class="q-card" id="mc-${q.n}" data-type="mc">
+    <div class="q-header" onclick="toggle(this)">
+      <div class="q-num">${q.n}</div>
+      <div class="q-text">${hl(q.q)}</div>
+      <div class="q-toggle">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="options">${optHtml}</div>
+    </div>
+  </div>`;
+}
+
+function buildTF(group) {
+  const itemHtml = group.items.map((it, i) => {
+    const label = String.fromCharCode(97+i); // a,b,c,d
+    return `<div class="tf-item">
+      <div class="tf-label">Ý ${label}</div>
+      <div class="tf-stmt">${hl(it.s)}</div>
+      <span class="tf-answer ${it.a?'dung':'sai'}">${it.a ? '✓ ĐÚNG' : '✗ SAI'}</span>
+    </div>`;
+  }).join('');
+  return `<div class="q-card" id="tf-${group.n}" data-type="tf">
+    <div class="q-header" onclick="toggle(this)">
+      <div class="q-num">${group.n}</div>
+      <div class="q-text">Xác định đúng / sai cho các phát biểu sau (Câu ${group.n})</div>
+      <div class="q-toggle">▼</div>
+    </div>
+    <div class="q-body">${itemHtml}</div>
+  </div>`;
+}
+
+function render() {
+  const main = document.getElementById('main');
+  const term = searchTerm.toLowerCase();
+
+  const filteredMC = mc.filter(q => {
+    if (currentFilter === 'tf') return false;
+    if (!term) return true;
+    return q.q.toLowerCase().includes(term) || q.opts.some(o => o.toLowerCase().includes(term));
+  });
+  const filteredTF = tf.filter(g => {
+    if (currentFilter === 'mc') return false;
+    if (!term) return true;
+    return g.items.some(it => it.s.toLowerCase().includes(term));
+  });
+
+  let html = '';
+
+  if (filteredMC.length > 0 && currentFilter !== 'tf') {
+    html += `<div class="section-label"><h2>📝 Trắc nghiệm</h2><div class="section-line"></div></div>`;
+    html += filteredMC.map(buildMC).join('');
+  }
+
+  if (filteredTF.length > 0 && currentFilter !== 'mc') {
+    html += `<div class="section-label"><h2>⚖️ Đúng / Sai</h2><div class="section-line"></div></div>`;
+    html += filteredTF.map(buildTF).join('');
+  }
+
+  if (filteredMC.length === 0 && filteredTF.length === 0) {
+    html = `<div class="empty"><div class="icon">🔍</div>Không tìm thấy câu hỏi phù hợp.</div>`;
+  }
+
+  main.innerHTML = html;
+
+  document.getElementById('totalCount').textContent = filteredMC.length + filteredTF.reduce((s,g)=>s+g.items.length,0);
+  document.getElementById('mcCount').textContent = filteredMC.length;
+  document.getElementById('tfCount').textContent = filteredTF.reduce((s,g)=>s+g.items.length,0);
+}
+
+// ─────────────────────────────────────────────
+// INTERACTIONS
+// ─────────────────────────────────────────────
+function toggle(header) {
+  header.parentElement.classList.toggle('open');
+}
+function expandAll() {
+  document.querySelectorAll('.q-card').forEach(c => c.classList.add('open'));
+}
+function collapseAll() {
+  document.querySelectorAll('.q-card').forEach(c => c.classList.remove('open'));
+}
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchTerm = e.target.value.trim();
+  render();
+  if (searchTerm) expandAll();
+});
+
+window.addEventListener('scroll', () => {
+  document.getElementById('btt').classList.toggle('visible', window.scrollY > 300);
+});
+
+render();
+</script>
+</body>
+</html>
